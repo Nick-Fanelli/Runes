@@ -15,8 +15,8 @@ public class SpriteRenderer extends SubRenderer {
 
     // Vertex
     // ==============
-    // Position                 Color
-    // float, float             float, float, float, float
+    // Position         Color                           Texture ID  Texture Coords
+    // float, float     float, float, float, float      float       float, float
 
     public static final int BATCH_SPRITE_COUNT = 20000;
 
@@ -36,10 +36,18 @@ public class SpriteRenderer extends SubRenderer {
     private static final int COLOR_FLOAT_COUNT = 4;
     private static final int COLOR_BYTE_COUNT = COLOR_FLOAT_COUNT * Float.BYTES;
 
-    private static final int POSITION_OFFSET_BYTES = 0;
-    private static final int COLOR_OFFSET_BYTES = POSITION_BYTE_COUNT;
+    private static final int TEXTURE_ID_FLOAT_COUNT = 1;
+    private static final int TEXTURE_ID_BYTE_COUNT = TEXTURE_ID_FLOAT_COUNT * Float.BYTES;
 
-    private static final int VERTEX_FLOAT_COUNT = POSITION_FLOAT_COUNT + COLOR_FLOAT_COUNT;
+    private static final int TEXTURE_COORDS_FLOAT_COUNT = 2;
+    private static final int TEXTURE_COORDS_BYTE_COUNT = TEXTURE_COORDS_FLOAT_COUNT * Float.BYTES;
+
+    private static final int POSITION_OFFSET_BYTES = 0;
+    private static final int COLOR_OFFSET_BYTES = POSITION_OFFSET_BYTES + POSITION_BYTE_COUNT;
+    private static final int TEXTURE_ID_OFFSET_BYTES = COLOR_OFFSET_BYTES + COLOR_BYTE_COUNT;
+    private static final int TEXTURE_COORDS_OFFSET_BYTES = TEXTURE_ID_OFFSET_BYTES + TEXTURE_ID_BYTE_COUNT;
+
+    private static final int VERTEX_FLOAT_COUNT = POSITION_FLOAT_COUNT + COLOR_FLOAT_COUNT + TEXTURE_ID_FLOAT_COUNT + TEXTURE_COORDS_FLOAT_COUNT;
     private static final int VERTEX_BYTE_COUNT = VERTEX_FLOAT_COUNT * Float.BYTES;
 
     private Shader shader;
@@ -73,6 +81,8 @@ public class SpriteRenderer extends SubRenderer {
         // Setup the Vertex Attrib Pointers
         glVertexAttribPointer(0, POSITION_FLOAT_COUNT, GL_FLOAT, false, VERTEX_BYTE_COUNT, POSITION_OFFSET_BYTES);
         glVertexAttribPointer(1, COLOR_FLOAT_COUNT, GL_FLOAT, false, VERTEX_BYTE_COUNT, COLOR_OFFSET_BYTES);
+        glVertexAttribPointer(2, TEXTURE_ID_FLOAT_COUNT, GL_FLOAT, false, TEXTURE_ID_BYTE_COUNT, TEXTURE_ID_OFFSET_BYTES);
+        glVertexAttribPointer(3, TEXTURE_COORDS_FLOAT_COUNT, GL_FLOAT, false, TEXTURE_COORDS_BYTE_COUNT, TEXTURE_COORDS_OFFSET_BYTES);
 
         // Unbind the VBO
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -120,6 +130,8 @@ public class SpriteRenderer extends SubRenderer {
 
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
+        glEnableVertexAttribArray(2);
+        glEnableVertexAttribArray(3);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboID);
 
@@ -129,6 +141,8 @@ public class SpriteRenderer extends SubRenderer {
 
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(2);
+        glDisableVertexAttribArray(3);
 
         glBindVertexArray(0);
 
@@ -163,13 +177,22 @@ public class SpriteRenderer extends SubRenderer {
     }
 
     private void AddVertex(Vector2f position, Vector4f color) {
+        // Position
         vertices[subVertexCount] = position.x;
         vertices[subVertexCount + 1] = position.y;
 
+        // Color
         vertices[subVertexCount + 2] = color.x;
         vertices[subVertexCount + 3] = color.y;
         vertices[subVertexCount + 4] = color.z;
         vertices[subVertexCount + 5] = color.w;
+
+        // Texture ID
+        vertices[subVertexCount + 6] = color.w;
+
+        // Texture Coords
+        vertices[subVertexCount + 7] = color.w;
+        vertices[subVertexCount + 8] = color.w;
 
         subVertexCount += VERTEX_FLOAT_COUNT;
     }
