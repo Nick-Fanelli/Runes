@@ -12,14 +12,14 @@ public class GameState extends State {
     public void OnCreate() {
         super.OnCreate();
 
-        for(int x = 0; x < 100; x++) {
-            for(int y = 0; y < 100; y++) {
-                GameObject gameObject = CreateGameObject();
-                gameObject.transform.position = new Vector2f(x, y);
-                gameObject.transform.scale = new Vector2f(0.9f, 0.9f);
-                gameObject.AddComponent(new SpriteRendererComponent(new Vector4f(x / 100.0f, y / 100.0f, 1.0f, 1.0f)));
-            }
-        }
+//        for(int x = 0; x < 100; x++) {
+//            for(int y = 0; y < 100; y++) {
+//                GameObject gameObject = CreateGameObject();
+//                gameObject.transform.position = new Vector2f(x, y);
+//                gameObject.transform.scale = new Vector2f(0.9f, 0.9f);
+//                gameObject.AddComponent(new SpriteRendererComponent(new Vector4f(x / 100.0f, y / 100.0f, 1.0f, 1.0f)));
+//            }
+//        }
 
     }
 
