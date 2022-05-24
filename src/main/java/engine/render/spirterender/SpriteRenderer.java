@@ -20,6 +20,13 @@ public class SpriteRenderer extends SubRenderer {
 
     public static final int BATCH_SPRITE_COUNT = 20000;
 
+    private static final Vector2f[] QUAD_VERTEX_POSITIONS = {
+            new Vector2f(-0.5f, -0.5f),
+            new Vector2f(0.5f, -0.5f),
+            new Vector2f(0.5f, 0.5f),
+            new Vector2f(-0.5f, 0.5f)
+    };
+
     private static final int BATCH_VERTEX_COUNT = BATCH_SPRITE_COUNT * 4;
     private static final int BATCH_INDEX_COUNT = BATCH_SPRITE_COUNT * 6;
 
@@ -171,16 +178,10 @@ public class SpriteRenderer extends SubRenderer {
 
         AllocateQuad();
 
-        Vector2f[] quadVertexPositions = {
-                new Vector2f(-0.5f, -0.5f),
-                new Vector2f(0.5f, -0.5f),
-                new Vector2f(0.5f, 0.5f),
-                new Vector2f(-0.5f, 0.5f)
-        };
-
         for(int i = 0; i < 4; i++) {
             AddVertex(
-                    new Vector2f(transform.position.x + quadVertexPositions[i].x * transform.scale.x, transform.position.y + quadVertexPositions[i].y * transform.scale.y),
+                    new Vector2f(transform.position.x + (QUAD_VERTEX_POSITIONS[i].x * transform.scale.x),
+                                 transform.position.y + (QUAD_VERTEX_POSITIONS[i].y * transform.scale.y)),
                     color
             );
         }
