@@ -3,10 +3,13 @@ package engine.render.spirterender;
 import engine.render.Renderer;
 import engine.render.Shader;
 import engine.render.SubRenderer;
+import engine.render.Texture;
 import engine.state.State;
 import engine.state.Transform;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
+
+import java.util.HashMap;
 
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL30.*;
@@ -25,6 +28,13 @@ public class SpriteRenderer extends SubRenderer {
             new Vector2f(0.5f, -0.5f),
             new Vector2f(0.5f, 0.5f),
             new Vector2f(-0.5f, 0.5f)
+    };
+
+    private static final Vector2f[] QUAD_TEXTURE_COORDS = {
+            new Vector2f(0, 0),
+            new Vector2f(1, 0),
+            new Vector2f(1, 1),
+            new Vector2f(0, 1)
     };
 
     private static final int BATCH_VERTEX_COUNT = BATCH_SPRITE_COUNT * 4;
@@ -57,15 +67,30 @@ public class SpriteRenderer extends SubRenderer {
     private int subVertexCount = 0;
     private int indexCount = 0;
 
+    private int[] textures;
+    private int[] textureSlots;
+    private int textureCount = 1;
+
     public SpriteRenderer(Renderer renderer, State state) { super(renderer, state); }
 
     @Override
     public void OnCreate() {
-        shader = new Shader("DefaultShader");
+        HashMap<String, String> replacements = new HashMap<>();
+        replacements.put("MAX_TEXTURE_COUNT", Integer.toString(super.renderer.GetGUPMaxTextureSlots()));
+
+        shader = new Shader("DefaultShader", replacements);
         shader.Create();
 
         // Create the vertices
         vertices = new float[BATCH_VERTEX_COUNT * VERTEX_FLOAT_COUNT];
+
+        // Allocate the texture slots
+        textures = new int[super.renderer.GetGUPMaxTextureSlots()];
+
+        textureSlots = new int[super.renderer.GetGUPMaxTextureSlots()];
+        for(int i = 0; i < this.textureSlots.length; i++) {
+            textureSlots[i] = i;
+        }
 
         // Create the VAO
         vaoID = glGenVertexArrays();
@@ -81,8 +106,8 @@ public class SpriteRenderer extends SubRenderer {
         // Setup the Vertex Attrib Pointers
         glVertexAttribPointer(0, POSITION_FLOAT_COUNT, GL_FLOAT, false, VERTEX_BYTE_COUNT, POSITION_OFFSET_BYTES);
         glVertexAttribPointer(1, COLOR_FLOAT_COUNT, GL_FLOAT, false, VERTEX_BYTE_COUNT, COLOR_OFFSET_BYTES);
-        glVertexAttribPointer(2, TEXTURE_ID_FLOAT_COUNT, GL_FLOAT, false, TEXTURE_ID_BYTE_COUNT, TEXTURE_ID_OFFSET_BYTES);
-        glVertexAttribPointer(3, TEXTURE_COORDS_FLOAT_COUNT, GL_FLOAT, false, TEXTURE_COORDS_BYTE_COUNT, TEXTURE_COORDS_OFFSET_BYTES);
+        glVertexAttribPointer(2, TEXTURE_ID_FLOAT_COUNT, GL_FLOAT, false, VERTEX_BYTE_COUNT, TEXTURE_ID_OFFSET_BYTES);
+        glVertexAttribPointer(3, TEXTURE_COORDS_FLOAT_COUNT, GL_FLOAT, false, VERTEX_BYTE_COUNT, TEXTURE_COORDS_OFFSET_BYTES);
 
         // Unbind the VBO
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -118,13 +143,21 @@ public class SpriteRenderer extends SubRenderer {
     private void UpdateBatchVertexData() {
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
         glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     private void Render() {
 
         shader.Bind();
+
         shader.AddUniformMat4("uProjection", super.state.camera.GetProjectionMatrix());
         shader.AddUniformMat4("uView", super.state.camera.GetViewMatrix());
+        shader.AddUniformIntArray("uTextures", this.textureSlots);
+
+        for(int i = 1; i < textureCount; i++) {
+            glActiveTexture(GL_TEXTURE0 + i);
+            glBindTexture(GL_TEXTURE_2D, textures[i]);
+        }
 
         glBindVertexArray(vaoID);
 
@@ -156,9 +189,17 @@ public class SpriteRenderer extends SubRenderer {
         }
     }
 
+    private void AllocateTexture() {
+        if(textureCount >= super.renderer.GetGUPMaxTextureSlots()) {
+            End();
+            Begin();
+        }
+    }
+
     @Override
     public void Begin() {
         subVertexCount = 0;
+        textureCount = 1;
     }
 
     @Override
@@ -176,7 +217,7 @@ public class SpriteRenderer extends SubRenderer {
         glDeleteBuffers(iboID);
     }
 
-    private void AddVertex(Vector2f position, Vector4f color) {
+    private void AddVertex(Vector2f position, Vector4f color, Vector2f textureCoords, int textureID) {
         // Position
         vertices[subVertexCount] = position.x;
         vertices[subVertexCount + 1] = position.y;
@@ -188,24 +229,47 @@ public class SpriteRenderer extends SubRenderer {
         vertices[subVertexCount + 5] = color.w;
 
         // Texture ID
-        vertices[subVertexCount + 6] = color.w;
+        vertices[subVertexCount + 6] = textureID;
 
         // Texture Coords
-        vertices[subVertexCount + 7] = color.w;
-        vertices[subVertexCount + 8] = color.w;
+        vertices[subVertexCount + 7] = textureCoords.x;
+        vertices[subVertexCount + 8] = textureCoords.y;
 
         subVertexCount += VERTEX_FLOAT_COUNT;
     }
 
-    public void DrawQuad(Transform transform, Vector4f color) {
+    public void DrawQuad(Transform transform, Vector4f color, Texture texture) {
 
         AllocateQuad();
+
+        int textureIndex = 0;
+        boolean shouldAllocateTexture = true;
+
+        if(texture != null) {
+            for (int i = 0; i < textureCount; i++) {
+                if (textures[i] == texture.GetTextureID()) {
+                    textureIndex = i;
+                    shouldAllocateTexture = false;
+                    break;
+                }
+            }
+
+            if (shouldAllocateTexture) {
+                AllocateTexture();
+
+                textureIndex = textureCount;
+                textures[textureCount] = texture.GetTextureID();
+                textureCount++;
+            }
+        }
 
         for(int i = 0; i < 4; i++) {
             AddVertex(
                     new Vector2f(transform.position.x + (QUAD_VERTEX_POSITIONS[i].x * transform.scale.x),
                                  transform.position.y + (QUAD_VERTEX_POSITIONS[i].y * transform.scale.y)),
-                    color
+                    color,
+                    QUAD_TEXTURE_COORDS[i],
+                    textureIndex
             );
         }
 

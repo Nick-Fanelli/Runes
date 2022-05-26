@@ -1,3 +1,5 @@
 package engine.asset;
 
-public record Asset<AssetType>(AssetType rawAsset) {}
+import engine.state.State;
+
+public record Asset<AssetType>(AssetType rawAsset, State state) {}

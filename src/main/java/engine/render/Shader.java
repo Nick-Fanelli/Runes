@@ -6,6 +6,8 @@ import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
@@ -17,8 +19,16 @@ public class Shader {
     private int programID;
     private final ArrayList<Integer> shaders = new ArrayList<>();
 
+    private final HashMap<String, String> replacements;
+
     public Shader(String shaderName) {
         this.shaderName = shaderName;
+        this.replacements = new HashMap<>();
+    }
+
+    public Shader(String shaderName, HashMap<String, String> replacements) {
+        this.shaderName = shaderName;
+        this.replacements = replacements;
     }
 
     public void Create() {
@@ -26,6 +36,11 @@ public class Shader {
 
         String vertShader = FileUtils.ReadResourceFile("shaders/" + shaderName + ".vert.glsl");
         String fragShader = FileUtils.ReadResourceFile("shaders/" + shaderName + ".frag.glsl");
+
+        for(Map.Entry<String, String> entry : replacements.entrySet()) {
+            vertShader = vertShader.replaceAll("!" + entry.getKey(), entry.getValue());
+            fragShader = fragShader.replaceAll("!" + entry.getKey(), entry.getValue());
+        }
 
         shaders.add(AttachShader(GL_VERTEX_SHADER, vertShader));
         shaders.add(AttachShader(GL_FRAGMENT_SHADER, fragShader));
@@ -86,6 +101,11 @@ public class Shader {
         floatBuffer = mat4.get(floatBuffer);
 
         glUniformMatrix4fv(location, false, floatBuffer);
+    }
+
+    public void AddUniformIntArray(String varName, int[] intArray) {
+        int location = glGetUniformLocation(programID, varName);
+        glUniform1iv(location, intArray);
     }
 
 }
