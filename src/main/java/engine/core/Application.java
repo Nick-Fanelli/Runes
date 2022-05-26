@@ -14,6 +14,7 @@ public class Application {
     private final String applicationName;
 
     private Display display;
+    private Input input;
     private StateManager stateManager;
 
     private int currentFps = -1;
@@ -23,16 +24,27 @@ public class Application {
     }
 
     public void StartApplication(State entryState) {
+        // Setup the State Manager
+        this.stateManager = new StateManager();
+
+        // Setup the Display
         DisplayPreferences displayPreferences = new DisplayPreferences();
         displayPreferences.displayName = this.applicationName;
-
-        this.stateManager = new StateManager();
 
         this.display = new Display(displayPreferences);
         this.display.InitializeDisplay();
         this.display.AddWindowResizeEventListener(event -> {
             this.stateManager.OnWindowResize(event);
         });
+        final long windowPtr = this.display.GetWindowPtr();
+
+        // Setup and Bind Input
+        this.input = new Input();
+
+        glfwSetKeyCallback(windowPtr, this.input::KeyCallback);
+        glfwSetMouseButtonCallback(windowPtr, this.input::MouseButtonCallback);
+        glfwSetCursorPosCallback(windowPtr, this.input::MousePositionCallback);
+        glfwSetScrollCallback(windowPtr, this.input::MouseScrollCallback);
 
         StartGameLoop(entryState);
     }
@@ -58,6 +70,7 @@ public class Application {
 
             if(deltaTime >= 0) {
                 this.stateManager.OnUpdate(deltaTime);
+                this.input.Update();
             }
 
             glfwSwapBuffers(windowPtr);

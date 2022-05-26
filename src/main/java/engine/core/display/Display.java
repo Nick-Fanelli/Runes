@@ -45,11 +45,10 @@ public class Display {
             throw new RuntimeException("Failed to create the GLFW Window");
 
         // Bind Key Callback
-        // TODO: Run through display input system
-        glfwSetKeyCallback(windowPtr, (windowPtr, key, scancode, action, mods) -> {
-            if(key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
-                glfwSetWindowShouldClose(windowPtr, true);
-        });
+//        glfwSetKeyCallback(windowPtr, (windowPtr, key, scancode, action, mods) -> {
+//            if(key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
+//                glfwSetWindowShouldClose(windowPtr, true);
+//        });
 
         glfwSetWindowSizeCallback(windowPtr, (windowPtr, width, height) -> {
             glViewport(0, 0, width, height); // Resize Viewport
