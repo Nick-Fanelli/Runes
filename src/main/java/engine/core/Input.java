@@ -3,6 +3,8 @@ package engine.core;
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.Arrays;
+
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Input {

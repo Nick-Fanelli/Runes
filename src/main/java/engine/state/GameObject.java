@@ -6,13 +6,15 @@ import java.util.ArrayList;
 
 public class GameObject {
 
-    private final State parentState;
+    protected final State parentState;
     private final ArrayList<Component> components = new ArrayList<>();
 
     public Transform transform;
 
     public GameObject(State state) {
         this.parentState = state;
+        this.parentState.AddGameObject(this);
+
         this.transform = new Transform();
     }
 

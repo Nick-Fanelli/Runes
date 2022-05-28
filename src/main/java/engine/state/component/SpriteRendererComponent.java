@@ -1,13 +1,15 @@
 package engine.state.component;
 
+import engine.render.sprite.SpriteSheet;
 import engine.render.Texture;
-import engine.render.spirterender.SpriteRenderer;
+import engine.render.sprite.SpriteRenderer;
 import org.joml.Vector4f;
 
 public class SpriteRendererComponent extends Component {
 
     public Vector4f color;
     public Texture texture;
+    public SpriteSheet.Sprite sprite = null;
 
     private SpriteRenderer spriteRenderer = null;
 
@@ -24,6 +26,12 @@ public class SpriteRendererComponent extends Component {
         this.texture = texture;
     }
 
+    public SpriteRendererComponent(Vector4f color, Texture texture, SpriteSheet.Sprite sprite) {
+        this.color = color;
+        this.texture = texture;
+        this.sprite = sprite;
+    }
+
     @Override
     public void OnCreate() {
         this.spriteRenderer = super.parentObject.GetParentState().GetRenderer().GetSpriteRenderer();
@@ -31,7 +39,7 @@ public class SpriteRendererComponent extends Component {
 
     @Override
     public void OnUpdate(float deltaTime) {
-        spriteRenderer.DrawQuad(super.parentObject.transform, color, texture);
+        spriteRenderer.DrawQuad(super.parentObject.transform, color, texture, sprite);
     }
 
     @Override

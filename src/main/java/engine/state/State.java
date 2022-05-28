@@ -43,9 +43,11 @@ public abstract class State {
     }
 
     public GameObject CreateGameObject() {
-        GameObject gameObject = new GameObject(this);
+        return new GameObject(this);
+    }
+
+    public void AddGameObject(GameObject gameObject) {
         this.gameObjects.add(gameObject);
-        return gameObject;
     }
 
     public Renderer GetRenderer() { return this.renderer; }

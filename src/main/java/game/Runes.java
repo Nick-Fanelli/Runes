@@ -2,6 +2,7 @@ package game;
 
 import engine.core.Application;
 import engine.utils.Logger;
+import game.states.GameState;
 
 public final class Runes {
 

@@ -6,7 +6,6 @@ import engine.state.StateChangeEvent;
 import engine.state.StateManager;
 
 import java.io.File;
-import java.net.URL;
 import java.util.HashMap;
 
 public final class AssetManager {

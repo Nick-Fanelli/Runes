@@ -1,4 +1,4 @@
-package engine.render.spirterender;
+package engine.render.sprite;
 
 import engine.render.Renderer;
 import engine.render.Shader;
@@ -238,7 +238,7 @@ public class SpriteRenderer extends SubRenderer {
         subVertexCount += VERTEX_FLOAT_COUNT;
     }
 
-    public void DrawQuad(Transform transform, Vector4f color, Texture texture) {
+    public void DrawQuad(Transform transform, Vector4f color, Texture texture, SpriteSheet.Sprite sprite) {
 
         AllocateQuad();
 
@@ -268,7 +268,7 @@ public class SpriteRenderer extends SubRenderer {
                     new Vector2f(transform.position.x + (QUAD_VERTEX_POSITIONS[i].x * transform.scale.x),
                                  transform.position.y + (QUAD_VERTEX_POSITIONS[i].y * transform.scale.y)),
                     color,
-                    QUAD_TEXTURE_COORDS[i],
+                    sprite == null ? QUAD_TEXTURE_COORDS[i] : sprite.textureCoords()[i],
                     textureIndex
             );
         }
