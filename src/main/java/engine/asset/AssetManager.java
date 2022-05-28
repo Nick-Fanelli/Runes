@@ -1,15 +1,13 @@
 package engine.asset;
 
-import engine.render.Shader;
 import engine.render.Texture;
 import engine.state.State;
 import engine.state.StateChangeEvent;
 import engine.state.StateManager;
 
+import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 public final class AssetManager {
 
@@ -20,18 +18,9 @@ public final class AssetManager {
     private static final HashMap<String, Asset<Texture>> textures = new HashMap<>();
 
     private static String GetFilepath(String prefix, String relativeFilepath) {
-        URL url = Thread.currentThread().getContextClassLoader().getResource(prefix + "/" + relativeFilepath);
+        File file = new File(prefix + File.separator + relativeFilepath);
 
-        if(url == null) {
-            throw new RuntimeException("Could not find URL!");
-        }
-
-        String path = url.getFile();
-
-        if(path.startsWith("/"))
-            path = path.substring(1);
-
-        return path;
+        return file.getAbsolutePath();
     }
 
     public static Texture LoadTexture(State state, String texturePath) {
@@ -39,7 +28,7 @@ public final class AssetManager {
             return textures.get(texturePath).rawAsset();
         }
 
-        Texture texture = new Texture(GetFilepath("textures", texturePath));
+        Texture texture = new Texture(GetFilepath("assets/textures", texturePath));
         texture.Create();
 
         Asset<Texture> asset = new Asset<>(texture, state);

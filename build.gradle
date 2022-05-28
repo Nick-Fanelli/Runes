@@ -9,17 +9,17 @@ version '1.0-SNAPSHOT'
 
 // Define LWJGL Version
 project.ext.lwjglVersion = "3.3.1"
+project.ext.jomlVersion = "1.10.4"
 
-// OS Binaries
 switch (OperatingSystem.current()) {
+    case OperatingSystem.LINUX:
+        project.ext.lwjglNatives = "natives-linux"
+        break
     case OperatingSystem.MAC_OS:
-        project.ext.lwjglNatives = System.getProperty("os.arch").startsWith("aarch64") ? "natives-macos-arm64" : "natives-macos"
+        project.ext.lwjglNatives = "natives-macos"
         break
     case OperatingSystem.WINDOWS:
-        def osArch = System.getProperty("os.arch")
-        project.ext.lwjglNatives = osArch.contains("64")
-                ? "natives-windows${osArch.startsWith("aarch64") ? "-arm64" : ""}"
-                : "natives-windows-x86"
+        project.ext.lwjglNatives = "natives-windows"
         break
 }
 
@@ -33,19 +33,21 @@ dependencies {
     implementation "org.lwjgl:lwjgl"
     implementation "org.lwjgl:lwjgl-assimp"
     implementation "org.lwjgl:lwjgl-glfw"
+    implementation "org.lwjgl:lwjgl-nfd"
     implementation "org.lwjgl:lwjgl-openal"
     implementation "org.lwjgl:lwjgl-opengl"
     implementation "org.lwjgl:lwjgl-stb"
     runtimeOnly "org.lwjgl:lwjgl::$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-assimp::$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-glfw::$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-nfd::$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-openal::$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-opengl::$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-stb::$lwjglNatives"
-    implementation "org.joml:joml:1.10.4"
+    implementation "org.joml:joml:${jomlVersion}"
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 
 test {

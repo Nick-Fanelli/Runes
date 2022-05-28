@@ -34,8 +34,8 @@ public class Shader {
     public void Create() {
         programID = glCreateProgram();
 
-        String vertShader = FileUtils.ReadResourceFile("shaders/" + shaderName + ".vert.glsl");
-        String fragShader = FileUtils.ReadResourceFile("shaders/" + shaderName + ".frag.glsl");
+        String vertShader = FileUtils.ReadAssetFile("assets/shaders/" + shaderName + ".vert.glsl");
+        String fragShader = FileUtils.ReadAssetFile("assets/shaders/" + shaderName + ".frag.glsl");
 
         for(Map.Entry<String, String> entry : replacements.entrySet()) {
             vertShader = vertShader.replaceAll("!" + entry.getKey(), entry.getValue());
