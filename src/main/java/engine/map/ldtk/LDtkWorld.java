@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class LDtkWorldFile {
+public class LDtkWorld {
 
     public ArrayNode levels;
 

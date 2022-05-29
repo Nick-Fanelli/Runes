@@ -29,8 +29,10 @@ public class StateManager {
     }
 
     public void OnUpdate(float deltaTime) {
-        if(StateManager.currentState != null)
+        if(StateManager.currentState != null) {
             StateManager.currentState.OnUpdate(deltaTime);
+            StateManager.currentState.OnRender();
+        }
     }
 
     public void OnDestroy() {

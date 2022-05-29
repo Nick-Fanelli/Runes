@@ -39,6 +39,11 @@ public class SpriteRendererComponent extends Component {
 
     @Override
     public void OnUpdate(float deltaTime) {
+
+    }
+
+    @Override
+    public void OnRender() {
         spriteRenderer.DrawQuad(super.parentObject.transform, color, texture, sprite);
     }
 

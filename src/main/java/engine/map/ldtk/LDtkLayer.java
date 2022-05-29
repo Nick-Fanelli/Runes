@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class LDtkLayer {
 
     public String __identifier;
+    public String __tilesetRelPath;
     public ArrayNode autoLayerTiles;
     public int __cWid;
     public int __cHei;

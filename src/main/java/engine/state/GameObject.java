@@ -13,7 +13,6 @@ public class GameObject {
 
     public GameObject(State state) {
         this.parentState = state;
-        this.parentState.AddGameObject(this);
 
         this.transform = new Transform();
     }
@@ -25,6 +24,11 @@ public class GameObject {
     public void OnUpdate(float deltaTime) {
         for(Component component : components)
             component.OnUpdate(deltaTime);
+    }
+
+    public void OnRender() {
+        for(Component component : components)
+            component.OnRender();
     }
 
     public void OnDestroy() {

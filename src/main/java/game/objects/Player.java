@@ -19,12 +19,13 @@ public class Player extends GameObject {
     private final SpriteSheet spriteSheet;
     private final SpriteAnimation walkingAnimation;
 
-    private SpriteRendererComponent rendererComponent;
-    private SpriteAnimatorComponent animatorComponent;
+    private final SpriteRendererComponent rendererComponent;
+    private final SpriteAnimatorComponent animatorComponent;
 
     public Player(State state) {
         super(state);
 
+        this.transform.position = new Vector2f(2.0f, 0.0f);
         this.transform.scale = new Vector2f(0.2f);
 
         Texture texture = AssetManager.LoadTexture(super.parentState, "spritesheet.png");
@@ -73,9 +74,9 @@ public class Player extends GameObject {
 
     @Override
     public void OnUpdate(float deltaTime) {
-        super.OnUpdate(deltaTime);
-
         HandleInput(deltaTime);
         UpdateSprite();
+
+        super.OnUpdate(deltaTime);
     }
 }

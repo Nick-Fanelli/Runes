@@ -8,6 +8,7 @@ public abstract class Component {
 
     public abstract void OnCreate();
     public abstract void OnUpdate(float deltaTime);
+    public abstract void OnRender();
     public abstract void OnDestroy();
 
     public void SetParentGameObject(GameObject gameObject) {

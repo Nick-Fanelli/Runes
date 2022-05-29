@@ -51,6 +51,11 @@ public class SpriteAnimatorComponent extends Component {
     }
 
     @Override
+    public void OnRender() {
+
+    }
+
+    @Override
     public void OnDestroy() {
 
     }

@@ -1,20 +1,13 @@
 package game.states;
 
-import engine.core.Input;
 import engine.core.display.WindowResizeEvent;
 import engine.map.TileMap;
-import engine.render.Texture;
-import engine.state.GameObject;
 import engine.state.State;
-import engine.state.component.SpriteRendererComponent;
 import engine.utils.FileUtils;
 import engine.map.ldtk.LDtkParser;
-import engine.map.ldtk.LDtkWorldFile;
+import engine.map.ldtk.LDtkWorld;
 import game.objects.Player;
 import org.joml.Vector2f;
-import org.joml.Vector4f;
-
-import java.io.File;
 
 public class GameState extends State {
 
@@ -29,7 +22,7 @@ public class GameState extends State {
 
         super.camera.SetPosition(new Vector2f(aspectRatio, 0.0f));
 
-        LDtkWorldFile worldFile = LDtkParser.Parse(FileUtils.ReadAssetFile("assets/maps/testmap.ldtk"));
+        LDtkWorld worldFile = LDtkParser.Parse(FileUtils.ReadAssetFile("assets/maps/testmap.ldtk"));
 
         tileMap = new TileMap(this, worldFile.ldtkLevels.get("Test_Level"));
         tileMap.GenerateGameObjects();
@@ -40,13 +33,29 @@ public class GameState extends State {
 
     @Override
     public void OnUpdate(float deltaTime) {
-        super.OnUpdate(deltaTime);
+        // Update Camera
         super.camera.SetXPosition(Math.max(aspectRatio, player.transform.position.x));
+
+        // Update Player
+        this.player.OnUpdate(deltaTime);
+    }
+
+    @Override
+    public void OnRender() {
+        this.renderer.Begin();
+
+        this.tileMap.OnRender();
+        this.player.OnRender();
+
+        this.renderer.End();
     }
 
     @Override
     public void OnWindowResize(WindowResizeEvent event) {
         super.OnWindowResize(event);
+
+        this.player.OnDestroy();
+        this.tileMap.OnDestroy();
 
         this.aspectRatio = event.aspectRation;
     }

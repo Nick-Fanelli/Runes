@@ -15,9 +15,9 @@ public class LDtkParser {
         return objectMapper;
     }
 
-    public static LDtkWorldFile Parse(String src) {
+    public static LDtkWorld Parse(String src) {
         try {
-            LDtkWorldFile worldFile = objectMapper.readValue(src, LDtkWorldFile.class);
+            LDtkWorld worldFile = objectMapper.readValue(src, LDtkWorld.class);
             worldFile.ParseLevels();
 
             return worldFile;
