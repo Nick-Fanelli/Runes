@@ -36,6 +36,13 @@ public class SpriteSheet {
         });
     }
 
+    public Sprite GetSprite(int t) {
+        int y = t / spriteWidthSpan;
+        int x = t % spriteWidthSpan;
+
+        return GetSprite(x, y);
+    }
+
     public Sprite GetSpriteFlipped(int x, int y) {
         y = (spriteHeightSpan - 1) - y;
 

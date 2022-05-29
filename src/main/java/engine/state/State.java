@@ -50,6 +50,11 @@ public abstract class State {
         this.gameObjects.add(gameObject);
     }
 
+    public void RemoveGameObject(GameObject gameObject) {
+        this.gameObjects.remove(gameObject);
+        gameObject.OnDestroy();
+    }
+
     public Renderer GetRenderer() { return this.renderer; }
 
 }

@@ -1,45 +1,38 @@
 package game.states;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import engine.asset.AssetManager;
+import engine.core.Input;
+import engine.core.display.WindowResizeEvent;
 import engine.map.TileMap;
 import engine.render.Texture;
 import engine.state.GameObject;
 import engine.state.State;
 import engine.state.component.SpriteRendererComponent;
 import engine.utils.FileUtils;
-import engine.utils.JSONLoader;
+import engine.map.ldtk.LDtkParser;
+import engine.map.ldtk.LDtkWorldFile;
 import game.objects.Player;
+import org.joml.Vector2f;
 import org.joml.Vector4f;
-import org.w3c.dom.Text;
 
 import java.io.File;
 
 public class GameState extends State {
 
-    private static final float speed = 10.0f;
-
-    private float backgroundSize;
+    private float aspectRatio = 1600.0f / 900.0f;
 
     private Player player;
+    private TileMap tileMap;
 
     @Override
     public void OnCreate() {
         super.OnCreate();
 
-        File file = new File("assets/maps/testmap/simplified/AutoLayers_advanced_demo/_composite.png");
+        super.camera.SetPosition(new Vector2f(aspectRatio, 0.0f));
 
-        Texture texture = new Texture(file.getAbsolutePath());
-        texture.Create();
+        LDtkWorldFile worldFile = LDtkParser.Parse(FileUtils.ReadAssetFile("assets/maps/testmap.ldtk"));
 
-        GameObject background = CreateGameObject();
-        background.AddComponent(new SpriteRendererComponent(new Vector4f(1.0f), texture));
-
-        backgroundSize = (2.0f / texture.GetHeight()) * texture.GetWidth();
-
-        background.transform.position.y = 0.0f;
-        background.transform.scale.x = backgroundSize;
-        background.transform.scale.y = 2.0f;
+        tileMap = new TileMap(this, worldFile.ldtkLevels.get("Test_Level"));
+        tileMap.GenerateGameObjects();
 
         player = new Player(this);
 
@@ -48,8 +41,13 @@ public class GameState extends State {
     @Override
     public void OnUpdate(float deltaTime) {
         super.OnUpdate(deltaTime);
-
-        super.camera.SetXPosition(Math.max(0.0f, player.transform.position.x));
+        super.camera.SetXPosition(Math.max(aspectRatio, player.transform.position.x));
     }
 
+    @Override
+    public void OnWindowResize(WindowResizeEvent event) {
+        super.OnWindowResize(event);
+
+        this.aspectRatio = event.aspectRation;
+    }
 }
