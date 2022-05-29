@@ -1,0 +1,12 @@
+{
+	"x": 0,
+	"y": 0,
+	"width": 496,
+	"height": 240,
+	"iid": "a2b563a0-66b0-11ec-9cd7-fd8a9b24800f",
+	"layers": [
+		"Sky.png",
+		"IntGrid_layer.png"
+	],
+	"entities" : {}
+}

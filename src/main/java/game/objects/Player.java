@@ -14,7 +14,7 @@ import org.joml.Vector4f;
 
 public class Player extends GameObject {
 
-    private static final float speed = 6.0f;
+    private static final float speed = 0.75f;
 
     private final SpriteSheet spriteSheet;
     private final SpriteAnimation walkingAnimation;
@@ -25,7 +25,7 @@ public class Player extends GameObject {
     public Player(State state) {
         super(state);
 
-        this.transform.scale = new Vector2f(4.0f);
+        this.transform.scale = new Vector2f(0.2f);
 
         Texture texture = AssetManager.LoadTexture(super.parentState, "spritesheet.png");
         spriteSheet = new SpriteSheet(texture, 32, 32);
@@ -36,7 +36,7 @@ public class Player extends GameObject {
         super.AddComponent(rendererComponent);
         super.AddComponent(animatorComponent);
 
-        this.walkingAnimation = new SpriteAnimation(1, 200, 8, true);
+        this.walkingAnimation = new SpriteAnimation(1, 65, 8, true);
     }
 
     private void HandleInput(float deltaTime) {

@@ -14,6 +14,7 @@ import java.util.Objects;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
+import static org.lwjgl.opengl.GL14.glBlendFuncSeparate;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Display {
@@ -86,7 +87,7 @@ public class Display {
 
         glViewport(0, 0, displayPreferences.startingWidth, displayPreferences.startingHeight);
 
-        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
 
         glEnable(GL_MULTISAMPLE);
 

@@ -12,7 +12,7 @@ public class Camera {
     private static final float WIDTH_ASPECT = 1920.0f, HEIGHT_ASPECT = 1080.0f;
 
     private float aspectRatio = 1600.0f / 900.0f;
-    private float scale = 0.1f;
+    private float scale = 1f;
 
     public Camera(Vector2f position) {
         this.position = position;
@@ -25,7 +25,7 @@ public class Camera {
 
     public void CalculateProjectionMatrix() {
         projectionMatrix.identity();
-        projectionMatrix.ortho2D(-aspectRatio / scale, aspectRatio / scale, -1.0f / scale, 1.0f / scale);
+        projectionMatrix.ortho2D(-aspectRatio, aspectRatio, -1.0f, 1.0f);
     }
 
     public void CalculateViewMatrix() {
@@ -39,6 +39,20 @@ public class Camera {
         CalculateViewMatrix();
     }
 
+    public void SetXPosition(float x) {
+        if(x == this.position.x)
+            return;
+        this.position.x = x;
+        CalculateViewMatrix();
+    }
+
+    public void SetYPosition(float y) {
+        if(y == this.position.y)
+            return;
+        this.position.y = y;
+        CalculateViewMatrix();
+    }
+
     public Matrix4f GetProjectionMatrix() { return this.projectionMatrix; }
     public Matrix4f GetViewMatrix() { return this.viewMatrix; }
 
@@ -46,5 +60,8 @@ public class Camera {
         this.aspectRatio = aspectRatio;
         CalculateProjectionMatrix();
     }
+
+    public float GetAspectRatio() { return this.aspectRatio; }
+    public float GetScale() { return this.scale; }
 
 }

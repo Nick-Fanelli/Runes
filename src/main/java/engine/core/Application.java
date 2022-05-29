@@ -65,8 +65,8 @@ public class Application {
         // Game Loop
         while(!glfwWindowShouldClose(windowPtr)) {
 
-            glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glClearColor(23 / 255.0f, 28 / 255.0f, 57 / 255.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
 
             if(deltaTime >= 0) {
                 this.stateManager.OnUpdate(deltaTime);
