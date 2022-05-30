@@ -49,7 +49,9 @@ public class TileMap {
                 GameObject gameObject = new GameObject(state);
                 gameObject.transform.position = new Vector2f(x, y);
                 gameObject.transform.scale = new Vector2f(tileSize);
-                gameObject.AddComponent(new SpriteRendererComponent(new Vector4f(1.0f), texture, spriteSheet.GetSprite(tile.t)));
+
+                gameObject.AddComponent(new SpriteRendererComponent(new Vector4f(1.0f), texture,
+                        spriteSheet.GetSprite(tile.t, SpriteSheet.SpriteFlip.GetFlip(tile.f))));
 
                 tiles.add(gameObject);
             }

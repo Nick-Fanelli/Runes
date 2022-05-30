@@ -18,8 +18,14 @@ public class LDtkLayer {
     public ArrayList<LDtkTile> ldtkTiles = new ArrayList<>();
 
     public void ParseTiles() throws IOException {
-        for(JsonNode node : autoLayerTiles)
-            ldtkTiles.add(LDtkParser.objectMapper.treeToValue(node, LDtkTile.class));
+        for(JsonNode node : autoLayerTiles) {
+            LDtkTile tile = LDtkParser.objectMapper.treeToValue(node, LDtkTile.class);
+
+            if(tile.f != 0)
+                System.out.println(tile.f);
+
+            ldtkTiles.add(tile);
+        }
     }
 
 }
