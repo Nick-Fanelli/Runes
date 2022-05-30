@@ -78,7 +78,7 @@ public class SpriteRenderer extends SubRenderer {
         HashMap<String, String> replacements = new HashMap<>();
         replacements.put("MAX_TEXTURE_COUNT", Integer.toString(super.renderer.GetGUPMaxTextureSlots()));
 
-        shader = new Shader("DefaultShader", replacements);
+        shader = new Shader("SpriteRenderer", replacements);
         shader.Create();
 
         // Create the vertices
