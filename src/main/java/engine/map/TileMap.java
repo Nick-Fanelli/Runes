@@ -43,7 +43,7 @@ public class TileMap {
             SpriteSheet spriteSheet = new SpriteSheet(texture, gridSize, gridSize);
 
             for(LDtkTile tile : layer.ldtkTiles) {
-                float x = (((float) tile.px[0] / gridSize) * tileSize);
+                float x = (((float) tile.px[0] / gridSize) *  tileSize);
                 float y = -(((float) tile.px[1] / gridSize) * tileSize) - yOffset;
 
                 GameObject gameObject = new GameObject(state);
