@@ -37,6 +37,9 @@ public class Shader {
         String vertShader = FileUtils.ReadAssetFile("assets/shaders/" + shaderName + ".vert.glsl");
         String fragShader = FileUtils.ReadAssetFile("assets/shaders/" + shaderName + ".frag.glsl");
 
+        if(vertShader == null || fragShader == null)
+            throw new RuntimeException("Could not initialize Shaders!");
+
         for(Map.Entry<String, String> entry : replacements.entrySet()) {
             vertShader = vertShader.replaceAll("!" + entry.getKey(), entry.getValue());
             fragShader = fragShader.replaceAll("!" + entry.getKey(), entry.getValue());

@@ -40,18 +40,23 @@ public class SpriteRenderer extends SubRenderer {
     private static final int BATCH_VERTEX_COUNT = BATCH_SPRITE_COUNT * 4;
     private static final int BATCH_INDEX_COUNT = BATCH_SPRITE_COUNT * 6;
 
+    // Position
     private static final int POSITION_FLOAT_COUNT = 2;
     private static final int POSITION_BYTE_COUNT = POSITION_FLOAT_COUNT * Float.BYTES;
 
+    // Color
     private static final int COLOR_FLOAT_COUNT = 4;
     private static final int COLOR_BYTE_COUNT = COLOR_FLOAT_COUNT * Float.BYTES;
 
+    // Texture ID
     private static final int TEXTURE_ID_FLOAT_COUNT = 1;
     private static final int TEXTURE_ID_BYTE_COUNT = TEXTURE_ID_FLOAT_COUNT * Float.BYTES;
 
+    // Texture Coords
     private static final int TEXTURE_COORDS_FLOAT_COUNT = 2;
     private static final int TEXTURE_COORDS_BYTE_COUNT = TEXTURE_COORDS_FLOAT_COUNT * Float.BYTES;
 
+    // Offsets
     private static final int POSITION_OFFSET_BYTES = 0;
     private static final int COLOR_OFFSET_BYTES = POSITION_OFFSET_BYTES + POSITION_BYTE_COUNT;
     private static final int TEXTURE_ID_OFFSET_BYTES = COLOR_OFFSET_BYTES + COLOR_BYTE_COUNT;
