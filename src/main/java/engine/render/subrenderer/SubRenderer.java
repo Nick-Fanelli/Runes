@@ -1,5 +1,6 @@
-package engine.render;
+package engine.render.subrenderer;
 
+import engine.render.Renderer;
 import engine.state.State;
 
 public abstract class SubRenderer {

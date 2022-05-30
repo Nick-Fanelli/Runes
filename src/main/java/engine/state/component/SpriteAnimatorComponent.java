@@ -1,7 +1,6 @@
 package engine.state.component;
 
 import engine.render.sprite.SpriteAnimation;
-import engine.render.sprite.SpriteRenderer;
 import engine.render.sprite.SpriteSheet;
 
 public class SpriteAnimatorComponent extends Component {

@@ -1,8 +1,8 @@
-package engine.render.sprite;
+package engine.render.subrenderer;
 
 import engine.render.Renderer;
 import engine.render.Shader;
-import engine.render.SubRenderer;
+import engine.render.sprite.SpriteSheet;
 import engine.render.Texture;
 import engine.state.State;
 import engine.state.Transform;

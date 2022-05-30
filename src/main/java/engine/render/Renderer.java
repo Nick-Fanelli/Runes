@@ -1,6 +1,6 @@
 package engine.render;
 
-import engine.render.sprite.SpriteRenderer;
+import engine.render.subrenderer.SpriteRenderer;
 import engine.state.State;
 import org.lwjgl.BufferUtils;
 

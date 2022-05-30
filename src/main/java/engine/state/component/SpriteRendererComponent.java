@@ -2,7 +2,7 @@ package engine.state.component;
 
 import engine.render.sprite.SpriteSheet;
 import engine.render.Texture;
-import engine.render.sprite.SpriteRenderer;
+import engine.render.subrenderer.SpriteRenderer;
 import org.joml.Vector4f;
 
 public class SpriteRendererComponent extends Component {
