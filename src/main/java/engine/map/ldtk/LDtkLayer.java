@@ -36,7 +36,7 @@ public class LDtkLayer {
     public int __gridSize;
 
     public float glTileSize;
-    public Vector2f glLayerStartPosition;
+    public Vector2f layerStartPosition;
 
     private LayerType layerType;
 
@@ -44,12 +44,11 @@ public class LDtkLayer {
     public ArrayList<LDtkEntity> ldtkEntities = new ArrayList<>();
 
     public void ParseTiles() throws IOException {
+
         this.layerType = LayerType.GetLayerTypeFromIdentifier(__type);
         this.glTileSize = 2.0f / (float) this.__cHei;
 
-        float yOffset = -1.0f + glTileSize / 2.0f;
-
-        glLayerStartPosition = new Vector2f(0, yOffset);
+        this.layerStartPosition = new Vector2f(-(1600.0f / 900.0f) - glTileSize / 2.0f, 1.0f);
 
         for(JsonNode node : autoLayerTiles) {
             LDtkTile tile = LDtkParser.objectMapper.treeToValue(node, LDtkTile.class);
@@ -58,6 +57,9 @@ public class LDtkLayer {
 
         for(JsonNode node : entityInstances) {
             LDtkEntity entity = LDtkParser.objectMapper.treeToValue(node, LDtkEntity.class);
+
+            entity.ComputeEntity(this);
+
             ldtkEntities.add(entity);
         }
     }

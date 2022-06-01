@@ -2,6 +2,7 @@ package engine.map;
 
 import com.sun.source.doctree.StartElementTree;
 import engine.asset.AssetManager;
+import engine.map.ldtk.LDtkEntity;
 import engine.map.ldtk.LDtkLayer;
 import engine.map.ldtk.LDtkLevel;
 import engine.map.ldtk.LDtkTile;
@@ -16,6 +17,7 @@ import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class TileMap {
 
@@ -23,6 +25,7 @@ public class TileMap {
     private final LDtkLevel level;
 
     private final ArrayList<GameObject> tiles = new ArrayList<>();
+    private final HashMap<String, LDtkEntity> entities = new HashMap<>();
 
     public TileMap(State state, LDtkLevel level) {
         this.state = state;
@@ -31,8 +34,10 @@ public class TileMap {
 
     public void GenerateGameObjects() {
         for(LDtkLayer layer : level.ldtkLayers) {
-            if(layer.GetLayerType() == LDtkLayer.LayerType.ENTITIES)
+            if(layer.GetLayerType() == LDtkLayer.LayerType.ENTITIES) {
+                ParseEntityLayer(layer);
                 continue;
+            }
 
             int gridSize = layer.__gridSize;
 
@@ -57,6 +62,16 @@ public class TileMap {
                 tiles.add(gameObject);
             }
         }
+    }
+
+    private void ParseEntityLayer(LDtkLayer layer) {
+        for(LDtkEntity entity : layer.ldtkEntities) {
+            entities.put(entity.__identifier, entity);
+        }
+    }
+
+    public LDtkEntity GetEntity(String identifier) {
+        return entities.get(identifier);
     }
 
     public Vector2f ConvertPixelsToPosition(Vector2f pixelPosition, float tileSize) {

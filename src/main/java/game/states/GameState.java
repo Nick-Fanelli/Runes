@@ -1,48 +1,53 @@
 package game.states;
 
 import engine.core.display.WindowResizeEvent;
-import engine.map.EntityQuery;
 import engine.map.TileMap;
-import engine.map.ldtk.LDtkLevel;
+import engine.map.ldtk.*;
 import engine.state.State;
-import engine.state.Transform;
 import engine.utils.FileUtils;
-import engine.map.ldtk.LDtkParser;
-import engine.map.ldtk.LDtkWorld;
 import game.objects.Player;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 public class GameState extends State {
 
-    private float aspectRatio = 1600.0f / 900.0f;
+    private Vector2f layerOffsetPosition;
 
     private Player player;
     private TileMap tileMap;
+
+    private float playerStartingX;
 
     @Override
     public void OnCreate() {
         super.OnCreate();
 
-        super.camera.SetPosition(new Vector2f(aspectRatio, 0.0f));
-
         LDtkWorld worldFile = LDtkParser.Parse(FileUtils.ReadAssetFile("assets/maps/world.ldtk"));
         LDtkLevel level = worldFile.ldtkLevels.get("Test_Level");
+        LDtkLayer firstLayer = level.ldtkLayers.get(0);
 
         // Generate Tile Map From Level
         tileMap = new TileMap(this, level);
         tileMap.GenerateGameObjects();
 
-        Vector2f positionOffset = EntityQuery.GetEntityOffset("Player", level.GetEntitiesLayers());
+        LDtkEntity tilemapPlayerEntity = tileMap.GetEntity("Player");
+
+        layerOffsetPosition = new Vector2f(firstLayer.layerStartPosition).negate();
 
         player = new Player(this);
-        player.transform.position = positionOffset;
+
+        if(tilemapPlayerEntity != null) {
+            player.transform.position = tilemapPlayerEntity.position;
+            player.transform.position.y += 0.025f; // Offset for player's bigger size
+        }
+
+        this.playerStartingX = player.transform.position.x;
+
     }
 
     @Override
     public void OnUpdate(float deltaTime) {
-        // Update Camera
-        super.camera.SetXPosition(Math.max(aspectRatio, player.transform.position.x));
+        super.camera.SetXPosition(layerOffsetPosition.x + this.player.transform.position.x - this.playerStartingX);
 
         // Update Player
         this.player.OnUpdate(deltaTime);
@@ -66,7 +71,5 @@ public class GameState extends State {
 
         this.player.OnDestroy();
         this.tileMap.OnDestroy();
-
-        this.aspectRatio = event.aspectRation;
     }
 }
