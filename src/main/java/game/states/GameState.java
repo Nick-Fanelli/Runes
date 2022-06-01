@@ -1,16 +1,17 @@
 package game.states;
 
 import engine.core.display.WindowResizeEvent;
+import engine.map.EntityQuery;
 import engine.map.TileMap;
+import engine.map.ldtk.LDtkLevel;
 import engine.state.State;
+import engine.state.Transform;
 import engine.utils.FileUtils;
 import engine.map.ldtk.LDtkParser;
 import engine.map.ldtk.LDtkWorld;
 import game.objects.Player;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
-
-import static org.lwjgl.opengl.GL11.*;
 
 public class GameState extends State {
 
@@ -25,13 +26,17 @@ public class GameState extends State {
 
         super.camera.SetPosition(new Vector2f(aspectRatio, 0.0f));
 
-        LDtkWorld worldFile = LDtkParser.Parse(FileUtils.ReadAssetFile("assets/maps/testmap.ldtk"));
+        LDtkWorld worldFile = LDtkParser.Parse(FileUtils.ReadAssetFile("assets/maps/world.ldtk"));
+        LDtkLevel level = worldFile.ldtkLevels.get("Test_Level");
 
-        tileMap = new TileMap(this, worldFile.ldtkLevels.get("Test_Level"));
+        // Generate Tile Map From Level
+        tileMap = new TileMap(this, level);
         tileMap.GenerateGameObjects();
 
-        player = new Player(this);
+        Vector2f positionOffset = EntityQuery.GetEntityOffset("Player", level.GetEntitiesLayers());
 
+        player = new Player(this);
+        player.transform.position = positionOffset;
     }
 
     @Override
@@ -49,7 +54,7 @@ public class GameState extends State {
 
         this.tileMap.OnRender();
 
-        renderer.GetLightRenderer().DrawLight(this.player.transform.position, new Vector4f(0.5f, 0.5f, 1.0f, 1.0f));
+        renderer.GetLightRenderer().DrawLight(new Vector2f(1.861f, 0.89f), new Vector4f(1.0f, 0.35f, 0.35f, 1.0f));
         this.player.OnRender();
 
         this.renderer.End();

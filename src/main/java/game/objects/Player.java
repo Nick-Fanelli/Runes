@@ -25,7 +25,7 @@ public class Player extends GameObject {
     public Player(State state) {
         super(state);
 
-        this.transform.position = new Vector2f(2.0f, 0.0f);
+        this.transform.position = new Vector2f(0.0f, 1.0f);
         this.transform.scale = new Vector2f(0.2f);
 
         Texture texture = AssetManager.LoadTexture(super.parentState, "spritesheet.png");

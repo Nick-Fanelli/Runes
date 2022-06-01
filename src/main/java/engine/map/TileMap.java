@@ -31,11 +31,12 @@ public class TileMap {
 
     public void GenerateGameObjects() {
         for(LDtkLayer layer : level.ldtkLayers) {
-            int vTileCount = layer.__cHei;
+            if(layer.GetLayerType() == LDtkLayer.LayerType.ENTITIES)
+                continue;
+
             int gridSize = layer.__gridSize;
 
-            float tileSize = 2.0f / (float) vTileCount;
-            float yOffset = -1.0f + tileSize / 2.0f;
+            float yOffset = -1.0f + layer.glTileSize / 2.0f;
 
             String textureFilepath = layer.__tilesetRelPath.split("/textures/")[layer.__tilesetRelPath.split("/textures/").length - 1];
 
@@ -43,12 +44,12 @@ public class TileMap {
             SpriteSheet spriteSheet = new SpriteSheet(texture, gridSize, gridSize);
 
             for(LDtkTile tile : layer.ldtkTiles) {
-                float x = (((float) tile.px[0] / gridSize) *  tileSize);
-                float y = -(((float) tile.px[1] / gridSize) * tileSize) - yOffset;
+                float x = (((float) tile.px[0] / gridSize) *  layer.glTileSize);
+                float y = -(((float) tile.px[1] / gridSize) * layer.glTileSize) - yOffset;
 
                 GameObject gameObject = new GameObject(state);
                 gameObject.transform.position = new Vector2f(x, y);
-                gameObject.transform.scale = new Vector2f(tileSize);
+                gameObject.transform.scale = new Vector2f(layer.glTileSize);
 
                 gameObject.AddComponent(new SpriteRendererComponent(new Vector4f(1.0f), texture,
                         spriteSheet.GetSprite(tile.t, SpriteSheet.SpriteFlip.GetFlip(tile.f))));
@@ -56,6 +57,15 @@ public class TileMap {
                 tiles.add(gameObject);
             }
         }
+    }
+
+    public Vector2f ConvertPixelsToPosition(Vector2f pixelPosition, float tileSize) {
+        float yOffset = -1.0f + tileSize / 2.0f;
+
+        float x = pixelPosition.x / tileSize;
+        float y = pixelPosition.y / tileSize - yOffset;
+
+        return new Vector2f(x, y);
     }
 
     public void OnRender() {
