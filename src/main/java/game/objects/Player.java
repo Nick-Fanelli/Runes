@@ -3,7 +3,6 @@ package game.objects;
 import engine.asset.AssetManager;
 import engine.core.Input;
 import engine.physics2d.Rigidbody2D;
-import engine.physics2d.colliders.BoxCollider2D;
 import engine.physics2d.colliders.CircleCollider;
 import engine.render.sprite.SpriteAnimation;
 import engine.render.sprite.SpriteSheet;
@@ -12,7 +11,6 @@ import engine.state.GameObject;
 import engine.state.State;
 import engine.state.component.SpriteAnimatorComponent;
 import engine.state.component.SpriteRendererComponent;
-import org.jbox2d.dynamics.BodyType;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
@@ -21,6 +19,7 @@ public class Player extends GameObject {
     private static final float speed = 1f;
 
     private final SpriteSheet spriteSheet;
+    private final SpriteAnimation idleAnimation;
     private final SpriteAnimation walkingAnimation;
 
     private final SpriteRendererComponent rendererComponent;
@@ -50,32 +49,33 @@ public class Player extends GameObject {
         super.AddComponent(rigidbody2D);
         super.AddComponent(circleCollider);
 
+        this.idleAnimation = new SpriteAnimation(0, 100, 13, true);
         this.walkingAnimation = new SpriteAnimation(1, 65, 8, true);
     }
 
     private void HandleInput(float deltaTime) {
-        boolean isMovingHorizontally = false;
+        boolean isAnimating = false;
 
         if(Input.IsKey(Input.KEY_RIGHT)) {
-            rigidbody2D.ApplyDesiredXLinearVelocity(speed);
+            rigidbody2D.SetDesiredXLinearVelocity(speed);
             walkingAnimation.isFlipped = false;
             animatorComponent.PlayIfNot(walkingAnimation);
-            isMovingHorizontally = true;
-        }
-
-        if(Input.IsKey(Input.KEY_LEFT)) {
-            rigidbody2D.ApplyDesiredXLinearVelocity(-speed);
+            isAnimating = true;
+        } else if(Input.IsKey(Input.KEY_LEFT)) {
+            rigidbody2D.SetDesiredXLinearVelocity(-speed);
             walkingAnimation.isFlipped = true;
             animatorComponent.PlayIfNot(walkingAnimation);
-            isMovingHorizontally = true;
+            isAnimating = true;
+        } else {
+            rigidbody2D.SetDesiredXLinearVelocity(0);
         }
 
         if(Input.IsKey(Input.KEY_UP)) {
             rigidbody2D.ApplyForce(0.0f, 0.1f);
         }
 
-        if(!isMovingHorizontally) {
-            animatorComponent.FreezeAnimation();
+        if(!isAnimating) {
+            animatorComponent.PlayIfNot(idleAnimation);
         }
     }
 

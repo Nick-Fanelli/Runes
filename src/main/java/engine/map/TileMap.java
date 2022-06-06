@@ -29,13 +29,16 @@ public class TileMap {
     private final Physics2D physics2D;
     private final LDtkLevel level;
 
+    private final int solidTileID;
+
     private final ArrayList<GameObject> tiles = new ArrayList<>();
     private final HashMap<String, LDtkEntity> entities = new HashMap<>();
 
-    public TileMap(State state, Physics2D physics2D, LDtkLevel level) {
+    public TileMap(State state, Physics2D physics2D, LDtkLevel level, int solidTileID) {
         this.state = state;
         this.physics2D = physics2D;
         this.level = level;
+        this.solidTileID = solidTileID;
     }
 
     public void GenerateGameObjects() {
@@ -72,7 +75,7 @@ public class TileMap {
 
                     int index = rowPos * layer.__cWid + colPos;
 
-                    if(layer.intGridCsv[index] == 1) {
+                    if(layer.intGridCsv[index] == solidTileID) {
                         Rigidbody2D rigidbody2D = new Rigidbody2D();
                         rigidbody2D.bodyType = BodyType.STATIC;
 

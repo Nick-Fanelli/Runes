@@ -63,6 +63,11 @@ public class SpriteAnimatorComponent extends Component {
         this.isRunning = false;
     }
 
+    public void GoToFrame(int frame) {
+        currentFrame = frame;
+        UpdateSprite();
+    }
+
     private void UpdateSprite() {
         if(!currentAnimation.isFlipped)
             this.currentSprite = spriteSheet.GetSprite(currentFrame, currentAnimation.animationRow);

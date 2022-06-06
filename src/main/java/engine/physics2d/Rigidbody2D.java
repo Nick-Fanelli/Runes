@@ -37,7 +37,7 @@ public class Rigidbody2D extends Component {
         rawBody.applyForceToCenter(new Vec2(xForce, yForce));
     }
 
-    public void ApplyDesiredXLinearVelocity(float linearVelocity) {
+    public void SetDesiredXLinearVelocity(float linearVelocity) {
         Vec2 currentVelocity = rawBody.getLinearVelocity();
 
         float deltaVelocity = linearVelocity - currentVelocity.x;

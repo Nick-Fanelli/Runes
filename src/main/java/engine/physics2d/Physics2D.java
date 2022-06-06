@@ -13,11 +13,8 @@ import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 import org.joml.Vector2f;
 
-import javax.swing.*;
-
 public class Physics2D {
 
-    // TODO: Make configurable
     public static final float PHYSICS_TIMESTEP = 1.0f / 60.0f;
     public static final int VELOCITY_ITERATIONS = 8; // 8
     public static final int POSITION_ITERATIONS = 3; // 3

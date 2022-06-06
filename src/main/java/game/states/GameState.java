@@ -35,7 +35,7 @@ public class GameState extends State {
         LDtkLayer firstLayer = level.ldtkLayers.get(0);
 
         // Generate Tile Map From Level
-        tileMap = new TileMap(this, physics2D, level);
+        tileMap = new TileMap(this, physics2D, level, 1);
         tileMap.GenerateGameObjects();
 
         LDtkEntity tilemapPlayerEntity = tileMap.GetEntity("Player");
