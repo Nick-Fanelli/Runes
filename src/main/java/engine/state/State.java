@@ -1,6 +1,7 @@
 package engine.state;
 
 import engine.core.display.WindowResizeEvent;
+import engine.physics2d.Physics2D;
 import engine.render.Camera;
 import engine.render.Renderer;
 import org.joml.Vector2f;

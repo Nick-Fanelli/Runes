@@ -6,10 +6,10 @@ public abstract class Component {
 
     protected GameObject parentObject = null;
 
-    public abstract void OnCreate();
-    public abstract void OnUpdate(float deltaTime);
-    public abstract void OnRender();
-    public abstract void OnDestroy();
+    public void OnCreate() {}
+    public void OnUpdate(float deltaTime) {}
+    public void OnRender() {}
+    public void OnDestroy() {}
 
     public void SetParentGameObject(GameObject gameObject) {
         this.parentObject = gameObject;

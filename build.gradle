@@ -25,6 +25,10 @@ switch (OperatingSystem.current()) {
 
 repositories {
     mavenCentral()
+
+    flatDir {
+        dirs 'libs'
+    }
 }
 
 dependencies {
@@ -47,6 +51,8 @@ dependencies {
     implementation "org.joml:joml:$jomlVersion"
 
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.9.3'
+
+    implementation name: 'jbox2d-library'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'

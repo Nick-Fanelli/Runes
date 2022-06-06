@@ -11,7 +11,6 @@ public class LDtkEntity {
 
     public void ComputeEntity(LDtkLayer layer) {
         this.position = new Vector2f(__grid[0] * layer.glTileSize, 1 - __grid[1] * layer.glTileSize);
-        System.out.println(this.position);
     }
 
 }

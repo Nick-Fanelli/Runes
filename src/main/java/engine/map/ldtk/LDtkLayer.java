@@ -18,7 +18,7 @@ public class LDtkLayer {
 
         public static LayerType GetLayerTypeFromIdentifier(String identifier) {
             return switch (identifier) {
-                case "IntGrid_layer" -> INT_GRID;
+                case "IntGrid" -> INT_GRID;
                 case "AutoLayer" -> AUTO_LAYER;
                 case "Tiles" -> TILES;
                 case "Entities" -> ENTITIES;
@@ -31,6 +31,7 @@ public class LDtkLayer {
     public String __tilesetRelPath;
     public ArrayNode autoLayerTiles;
     public ArrayNode entityInstances;
+    public int[] intGridCsv;
     public int __cWid;
     public int __cHei;
     public int __gridSize;
@@ -62,6 +63,8 @@ public class LDtkLayer {
 
             ldtkEntities.add(entity);
         }
+
+        System.out.println(this.layerType);
     }
 
     public LayerType GetLayerType() { return this.layerType; }

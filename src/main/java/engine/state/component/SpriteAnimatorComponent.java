@@ -25,11 +25,6 @@ public class SpriteAnimatorComponent extends Component {
     }
 
     @Override
-    public void OnCreate() {
-
-    }
-
-    @Override
     public void OnUpdate(float deltaTime) {
         if(!isRunning)
             return;
@@ -47,16 +42,6 @@ public class SpriteAnimatorComponent extends Component {
 
            UpdateSprite();
         }
-    }
-
-    @Override
-    public void OnRender() {
-
-    }
-
-    @Override
-    public void OnDestroy() {
-
     }
 
     public void PlayIfNot(SpriteAnimation animation) {

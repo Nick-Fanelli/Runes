@@ -269,9 +269,23 @@ public class SpriteRenderer extends SubRenderer {
         }
 
         for(int i = 0; i < 4; i++) {
+
+            float xPos = transform.position.x + (QUAD_VERTEX_POSITIONS[i].x * transform.scale.x);
+            float yPos = transform.position.y + (QUAD_VERTEX_POSITIONS[i].y * transform.scale.y);
+
+            // Rotate the position
+            if(transform.rotation != 0.0f) {
+                float radAngle = (float) Math.toRadians(transform.rotation); // negative is clockwise
+
+                float rx = (float) (transform.position.x + (xPos - transform.position.x) * Math.cos(radAngle) - (yPos - transform.position.y) * Math.sin(radAngle));
+                float ry = (float) (transform.position.y + (xPos - transform.position.x) * Math.sin(radAngle) + (yPos - transform.position.y) * Math.cos(radAngle));
+
+                xPos = rx;
+                yPos = ry;
+            }
+
             AddVertex(
-                    new Vector2f(transform.position.x + (QUAD_VERTEX_POSITIONS[i].x * transform.scale.x),
-                                 transform.position.y + (QUAD_VERTEX_POSITIONS[i].y * transform.scale.y)),
+                    new Vector2f(xPos, yPos),
                     color,
                     sprite == null ? QUAD_TEXTURE_COORDS[i] : sprite.textureCoords()[i],
                     textureIndex

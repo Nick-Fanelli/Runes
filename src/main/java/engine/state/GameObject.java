@@ -42,6 +42,32 @@ public class GameObject {
         this.components.add(component);
     }
 
+    public <T extends Component> T GetComponent(Class<T> componentClass) {
+        for(Component c : components) {
+            if(componentClass.isAssignableFrom(c.getClass())) {
+                try {
+                    return componentClass.cast(c);
+                } catch(ClassCastException e) {
+                    e.printStackTrace();
+                    assert false : "Could not cast component!";
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public <T extends Component> void RemoveComponent(Class<T> componentClass) {
+        for(int i = 0; i < components.size(); i++) {
+            Component c = components.get(i);
+
+            if(componentClass.isAssignableFrom(c.getClass())) {
+                components.remove(i);
+                return;
+            }
+        }
+    }
+
     public State GetParentState() { return this.parentState; }
 
 }
