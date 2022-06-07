@@ -6,11 +6,13 @@ import java.util.ArrayList;
 
 public class UILayer {
 
+    protected final State state;
     private final UIRenderer uiRenderer;
 
     protected ArrayList<UIElement> uiElements = new ArrayList<>();
 
     public UILayer(State state) {
+        this.state = state;
         this.uiRenderer = state.GetRenderer().GetUIRenderer();
     }
 
