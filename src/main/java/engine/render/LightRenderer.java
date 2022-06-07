@@ -1,12 +1,7 @@
-package engine.render.subrenderer;
+package engine.render;
 
-import engine.render.Renderer;
-import engine.render.Shader;
 import engine.state.State;
-import engine.state.Transform;
-import org.joml.Random;
 import org.joml.Vector2f;
-import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import static org.lwjgl.opengl.GL15.*;

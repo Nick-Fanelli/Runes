@@ -1,6 +1,6 @@
 package engine.physics2d.colliders;
 
-import engine.render.subrenderer.SpriteRenderer;
+import engine.render.sprite.SpriteRenderer;
 import engine.state.Transform;
 import engine.state.component.Component;
 import org.joml.Vector2f;

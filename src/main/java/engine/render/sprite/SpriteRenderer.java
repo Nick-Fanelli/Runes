@@ -1,9 +1,9 @@
-package engine.render.subrenderer;
+package engine.render.sprite;
 
 import engine.render.Renderer;
 import engine.render.Shader;
-import engine.render.sprite.SpriteSheet;
 import engine.render.Texture;
+import engine.render.SubRenderer;
 import engine.state.State;
 import engine.state.Transform;
 import org.joml.Vector2f;

@@ -1,4 +1,4 @@
-package engine.render.subrenderer;
+package engine.render;
 
 import engine.render.Renderer;
 import engine.state.State;
