@@ -18,11 +18,9 @@ public class Player extends GameObject {
 
     private static final float speed = 1f;
 
-    private final SpriteSheet spriteSheet;
     private final SpriteAnimation idleAnimation;
     private final SpriteAnimation walkingAnimation;
 
-    private final SpriteRendererComponent rendererComponent;
     private final SpriteAnimatorComponent animatorComponent;
     private final Rigidbody2D rigidbody2D;
 
@@ -33,16 +31,16 @@ public class Player extends GameObject {
         this.transform.scale = new Vector2f(0.2f);
 
         Texture texture = AssetManager.LoadTexture(super.parentState, "spritesheet.png");
-        spriteSheet = new SpriteSheet(texture, 32, 32);
+        SpriteSheet spriteSheet = new SpriteSheet(texture, 32, 32);
 
-        rendererComponent = new SpriteRendererComponent(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), texture, spriteSheet.GetSprite(0, 0));
+        SpriteRendererComponent rendererComponent = new SpriteRendererComponent(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), texture, spriteSheet.GetSprite(0, 0));
         animatorComponent = new SpriteAnimatorComponent(spriteSheet, rendererComponent);
         rigidbody2D = new Rigidbody2D();
         rigidbody2D.SetFixedRotation(true);
 
         CircleCollider circleCollider = new CircleCollider();
         circleCollider.radius = 0.04f;
-        circleCollider.positionOffset.y = -0.05f;
+        circleCollider.positionOffset.y = -0.03f;
 
         super.AddComponent(rendererComponent);
         super.AddComponent(animatorComponent);
@@ -71,7 +69,7 @@ public class Player extends GameObject {
         }
 
         if(Input.IsKey(Input.KEY_UP)) {
-            rigidbody2D.ApplyForce(0.0f, 0.1f);
+            rigidbody2D.SetDesiredYLinearVelocity(1f);
         }
 
         if(!isAnimating) {

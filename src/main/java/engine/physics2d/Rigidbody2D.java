@@ -38,12 +38,21 @@ public class Rigidbody2D extends Component {
     }
 
     public void SetDesiredXLinearVelocity(float linearVelocity) {
-        Vec2 currentVelocity = rawBody.getLinearVelocity();
+        float currentVelocityX = rawBody.getLinearVelocity().x;
 
-        float deltaVelocity = linearVelocity - currentVelocity.x;
+        float deltaVelocity = linearVelocity - currentVelocityX;
         float impulse = rawBody.getMass() * deltaVelocity;
 
         rawBody.applyLinearImpulse(new Vec2(impulse, 0), rawBody.getWorldCenter());
+    }
+
+    public void SetDesiredYLinearVelocity(float linearVelocity) {
+        float currentVelocityY = rawBody.getLinearVelocity().y;
+
+        float deltaVelocity = linearVelocity - currentVelocityY;
+        float impulse = rawBody.getMass() * deltaVelocity;
+
+        rawBody.applyLinearImpulse(new Vec2(0, impulse), rawBody.getWorldCenter());
     }
 
     public boolean IsFixedRotation() { return fixedRotation; }
