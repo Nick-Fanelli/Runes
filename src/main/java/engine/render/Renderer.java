@@ -1,6 +1,7 @@
 package engine.render;
 
 import engine.render.sprite.SpriteRenderer;
+import engine.render.ui.UIRenderer;
 import engine.state.State;
 import org.lwjgl.BufferUtils;
 
@@ -16,6 +17,7 @@ public class Renderer {
 
     private final SpriteRenderer spriteRenderer;
     private final LightRenderer lightRenderer;
+    private final UIRenderer uiRenderer;
 
     private int gpuMaxTextureSlots;
     private int whiteTextureID = 0;
@@ -25,6 +27,7 @@ public class Renderer {
 
         this.spriteRenderer = new SpriteRenderer(this, state);
         this.lightRenderer = new LightRenderer(this, state);
+        this.uiRenderer = new UIRenderer(this, state);
     }
 
     public void OnCreate() {
@@ -35,11 +38,13 @@ public class Renderer {
         // Create Renderers
         this.spriteRenderer.OnCreate();
         this.lightRenderer.OnCreate();
+        this.uiRenderer.OnCreate();
     }
 
     public void Begin() {
         this.spriteRenderer.Begin();
         this.lightRenderer.Begin();
+        this.uiRenderer.Begin();
     }
 
     public void End() {
@@ -48,11 +53,14 @@ public class Renderer {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE);
         this.lightRenderer.End();
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        this.uiRenderer.End();
     }
 
     public void OnDestroy() {
         this.spriteRenderer.OnDestroy();
         this.lightRenderer.OnDestroy();
+        this.uiRenderer.OnDestroy();
 
         glDeleteTextures(whiteTextureID);
     }
@@ -62,6 +70,11 @@ public class Renderer {
 
     public SpriteRenderer GetSpriteRenderer() { return this.spriteRenderer; }
     public LightRenderer GetLightRenderer() { return this.lightRenderer; }
+    public UIRenderer GetUIRenderer() { return this.uiRenderer; }
+
+    public void UpdateAspectRatio(float aspectRatio) {
+        this.uiRenderer.UpdateAspectRatio(aspectRatio);
+    }
 
     // Utility Methods
     private void QueryGPU() {

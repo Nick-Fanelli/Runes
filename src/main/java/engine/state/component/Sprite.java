@@ -5,7 +5,7 @@ import engine.render.Texture;
 import engine.render.sprite.SpriteRenderer;
 import org.joml.Vector4f;
 
-public class SpriteRendererComponent extends Component {
+public class Sprite extends Component {
 
     public Vector4f color;
     public Texture texture;
@@ -13,20 +13,20 @@ public class SpriteRendererComponent extends Component {
 
     private SpriteRenderer spriteRenderer = null;
 
-    public SpriteRendererComponent() {
+    public Sprite() {
         this(new Vector4f(1.0f));
     }
 
-    public SpriteRendererComponent(Vector4f color) {
+    public Sprite(Vector4f color) {
         this(color, null);
     }
 
-    public SpriteRendererComponent(Vector4f color, Texture texture) {
+    public Sprite(Vector4f color, Texture texture) {
         this.color = color;
         this.texture = texture;
     }
 
-    public SpriteRendererComponent(Vector4f color, Texture texture, SpriteSheet.Sprite sprite) {
+    public Sprite(Vector4f color, Texture texture, SpriteSheet.Sprite sprite) {
         this.color = color;
         this.texture = texture;
         this.sprite = sprite;

@@ -32,6 +32,7 @@ public abstract class State {
 
     public void OnWindowResize(WindowResizeEvent event) {
         this.camera.UpdateAspectRatio(event.aspectRation);
+        this.renderer.UpdateAspectRatio(event.aspectRation);
     }
 
     public Renderer GetRenderer() { return this.renderer; }

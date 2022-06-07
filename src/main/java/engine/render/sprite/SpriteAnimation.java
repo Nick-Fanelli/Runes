@@ -1,7 +1,5 @@
 package engine.render.sprite;
 
-import engine.state.component.SpriteAnimatorComponent;
-
 public class SpriteAnimation {
 
     public int animationRow;

@@ -63,8 +63,6 @@ public class LDtkLayer {
 
             ldtkEntities.add(entity);
         }
-
-        System.out.println(this.layerType);
     }
 
     public LayerType GetLayerType() { return this.layerType; }

@@ -9,8 +9,8 @@ import engine.render.sprite.SpriteSheet;
 import engine.render.Texture;
 import engine.state.GameObject;
 import engine.state.State;
-import engine.state.component.SpriteAnimatorComponent;
-import engine.state.component.SpriteRendererComponent;
+import engine.state.component.SpriteAnimator;
+import engine.state.component.Sprite;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
@@ -21,7 +21,7 @@ public class Player extends GameObject {
     private final SpriteAnimation idleAnimation;
     private final SpriteAnimation walkingAnimation;
 
-    private final SpriteAnimatorComponent animatorComponent;
+    private final SpriteAnimator animatorComponent;
     private final Rigidbody2D rigidbody2D;
 
     public Player(State state) {
@@ -33,8 +33,8 @@ public class Player extends GameObject {
         Texture texture = AssetManager.LoadTexture(super.parentState, "spritesheet.png");
         SpriteSheet spriteSheet = new SpriteSheet(texture, 32, 32);
 
-        SpriteRendererComponent rendererComponent = new SpriteRendererComponent(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), texture, spriteSheet.GetSprite(0, 0));
-        animatorComponent = new SpriteAnimatorComponent(spriteSheet, rendererComponent);
+        Sprite rendererComponent = new Sprite(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), texture, spriteSheet.GetSprite(0, 0));
+        animatorComponent = new SpriteAnimator(spriteSheet, rendererComponent);
         rigidbody2D = new Rigidbody2D();
         rigidbody2D.SetFixedRotation(true);
 

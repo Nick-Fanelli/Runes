@@ -1,6 +1,5 @@
 package engine.map;
 
-import com.sun.source.doctree.StartElementTree;
 import engine.asset.AssetManager;
 import engine.map.ldtk.LDtkEntity;
 import engine.map.ldtk.LDtkLayer;
@@ -13,9 +12,7 @@ import engine.render.Texture;
 import engine.render.sprite.SpriteSheet;
 import engine.state.GameObject;
 import engine.state.State;
-import engine.state.component.SpriteAnimatorComponent;
-import engine.state.component.SpriteRendererComponent;
-import game.states.GameState;
+import engine.state.component.Sprite;
 import org.jbox2d.dynamics.BodyType;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
@@ -65,7 +62,7 @@ public class TileMap {
                 gameObject.transform.position = new Vector2f(x, y);
                 gameObject.transform.scale = new Vector2f(layer.glTileSize);
 
-                gameObject.AddComponent(new SpriteRendererComponent(new Vector4f(1.0f), texture,
+                gameObject.AddComponent(new Sprite(new Vector4f(1.0f), texture,
                         spriteSheet.GetSprite(tile.t, SpriteSheet.SpriteFlip.GetFlip(tile.f))));
 
                 if(layer.GetLayerType() == LDtkLayer.LayerType.INT_GRID) {

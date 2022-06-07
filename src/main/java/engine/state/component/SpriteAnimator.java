@@ -3,10 +3,10 @@ package engine.state.component;
 import engine.render.sprite.SpriteAnimation;
 import engine.render.sprite.SpriteSheet;
 
-public class SpriteAnimatorComponent extends Component {
+public class SpriteAnimator extends Component {
 
     private final SpriteSheet spriteSheet;
-    private final SpriteRendererComponent rendererComponent;
+    private final Sprite rendererComponent;
 
     private SpriteSheet.Sprite currentSprite = null;
 
@@ -17,7 +17,7 @@ public class SpriteAnimatorComponent extends Component {
     private int currentFrame = 0;
     private float frameTimer = 0.0f;
 
-    public SpriteAnimatorComponent(SpriteSheet spriteSheet, SpriteRendererComponent rendererComponent) {
+    public SpriteAnimator(SpriteSheet spriteSheet, Sprite rendererComponent) {
         this.spriteSheet = spriteSheet;
         this.rendererComponent = rendererComponent;
         this.currentAnimation = new SpriteAnimation(0, 0, 1, false);

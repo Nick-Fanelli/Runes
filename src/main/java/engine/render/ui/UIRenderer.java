@@ -1,9 +1,10 @@
-package engine.render.sprite;
+package engine.render.ui;
 
 import engine.render.Renderer;
 import engine.render.Shader;
-import engine.render.Texture;
 import engine.render.SubRenderer;
+import engine.render.Texture;
+import engine.render.sprite.SpriteSheet;
 import engine.state.State;
 import engine.state.Transform;
 import org.joml.Vector2f;
@@ -11,10 +12,13 @@ import org.joml.Vector4f;
 
 import java.util.HashMap;
 
+import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
-public class SpriteRenderer extends SubRenderer {
+public class UIRenderer extends SubRenderer {
 
     // Vertex
     // ==============
@@ -22,13 +26,6 @@ public class SpriteRenderer extends SubRenderer {
     // float, float     float, float, float, float      float       float, float
 
     public static final int BATCH_SPRITE_COUNT = 20000;
-
-    private static final Vector2f[] QUAD_VERTEX_POSITIONS = {
-            new Vector2f(-0.5f, -0.5f),
-            new Vector2f(0.5f, -0.5f),
-            new Vector2f(0.5f, 0.5f),
-            new Vector2f(-0.5f, 0.5f)
-    };
 
     private static final Vector2f[] QUAD_TEXTURE_COORDS = {
             new Vector2f(0, 0),
@@ -65,6 +62,8 @@ public class SpriteRenderer extends SubRenderer {
     private static final int VERTEX_FLOAT_COUNT = POSITION_FLOAT_COUNT + COLOR_FLOAT_COUNT + TEXTURE_ID_FLOAT_COUNT + TEXTURE_COORDS_FLOAT_COUNT;
     private static final int VERTEX_BYTE_COUNT = VERTEX_FLOAT_COUNT * Float.BYTES;
 
+    private float aspectRatio = 1600.0f / 900.0f;
+
     private Shader shader;
     private int vaoID, vboID, iboID;
 
@@ -76,7 +75,7 @@ public class SpriteRenderer extends SubRenderer {
     private int[] textureSlots;
     private int textureCount = 1;
 
-    public SpriteRenderer(Renderer renderer, State state) {
+    public UIRenderer(Renderer renderer, State state) {
         super(renderer, state);
     }
 
@@ -85,7 +84,7 @@ public class SpriteRenderer extends SubRenderer {
         HashMap<String, String> replacements = new HashMap<>();
         replacements.put("MAX_TEXTURE_COUNT", Integer.toString(super.renderer.GetGUPMaxTextureSlots()));
 
-        shader = new Shader("SpriteRenderer", replacements);
+        shader = new Shader("UIRenderer", replacements);
         shader.Create();
 
         // Create the vertices
@@ -158,7 +157,6 @@ public class SpriteRenderer extends SubRenderer {
         shader.Bind();
 
         shader.AddUniformMat4("uProjection", super.state.camera.GetProjectionMatrix());
-        shader.AddUniformMat4("uView", super.state.camera.GetViewMatrix());
         shader.AddUniformIntArray("uTextures", this.textureSlots);
 
         for(int i = 1; i < textureCount; i++) {
@@ -245,7 +243,9 @@ public class SpriteRenderer extends SubRenderer {
         subVertexCount += VERTEX_FLOAT_COUNT;
     }
 
-    public void DrawQuad(Transform transform, Vector4f color, Texture texture, SpriteSheet.Sprite sprite) {
+    public void UpdateAspectRatio(float aspectRatio) { this.aspectRatio = aspectRatio; }
+
+    public void DrawQuad(Transform transform, AnchorPoint anchorPoint, Vector4f color, Texture texture, SpriteSheet.Sprite sprite) {
 
         AllocateQuad();
 
@@ -272,15 +272,17 @@ public class SpriteRenderer extends SubRenderer {
 
         for(int i = 0; i < 4; i++) {
 
-            float xPos = transform.position.x + (QUAD_VERTEX_POSITIONS[i].x * transform.scale.x);
-            float yPos = transform.position.y + (QUAD_VERTEX_POSITIONS[i].y * transform.scale.y);
+            float adjustedXTransform = transform.position.x * aspectRatio;
+
+            float xPos = adjustedXTransform + (anchorPoint.offsets[i].x * transform.scale.x);
+            float yPos = transform.position.y + (anchorPoint.offsets[i].y * transform.scale.y);
 
             // Rotate the position
             if(transform.rotation != 0.0f) {
                 float radAngle = (float) Math.toRadians(transform.rotation); // negative is clockwise
 
-                float rx = (float) (transform.position.x + (xPos - transform.position.x) * Math.cos(radAngle) - (yPos - transform.position.y) * Math.sin(radAngle));
-                float ry = (float) (transform.position.y + (xPos - transform.position.x) * Math.sin(radAngle) + (yPos - transform.position.y) * Math.cos(radAngle));
+                float rx = (float) (adjustedXTransform + (xPos - adjustedXTransform) * Math.cos(radAngle) - (yPos - transform.position.y) * Math.sin(radAngle));
+                float ry = (float) (transform.position.y + (xPos - adjustedXTransform) * Math.sin(radAngle) + (yPos - transform.position.y) * Math.cos(radAngle));
 
                 xPos = rx;
                 yPos = ry;
@@ -297,4 +299,5 @@ public class SpriteRenderer extends SubRenderer {
         indexCount += 6; // 6 indices per quad
 
     }
+
 }
