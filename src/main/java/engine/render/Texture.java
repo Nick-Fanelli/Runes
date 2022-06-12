@@ -1,12 +1,8 @@
 package engine.render;
 
-import engine.utils.FileUtils;
-import engine.utils.Logger;
+import engine.utils.IOUtils;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.stb.STBImage;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
@@ -46,7 +42,7 @@ public class Texture {
         IntBuffer height = BufferUtils.createIntBuffer(1);
         IntBuffer channels = BufferUtils.createIntBuffer(1);
 
-        byte[] bytes = FileUtils.ReadAssetFileAsBytes(filepath);
+        byte[] bytes = IOUtils.ReadAssetFileAsBytes(filepath);
 
         assert bytes != null;
 

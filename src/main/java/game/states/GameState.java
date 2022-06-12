@@ -1,11 +1,12 @@
 package game.states;
 
+import engine.audio.AudioClip;
 import engine.core.display.WindowResizeEvent;
 import engine.map.TileMap;
 import engine.map.ldtk.*;
 import engine.physics2d.Physics2D;
 import engine.state.State;
-import engine.utils.FileUtils;
+import engine.utils.IOUtils;
 import engine.utils.Range;
 import game.objects.Player;
 import game.ui.GameUILayer;
@@ -25,9 +26,11 @@ public class GameState extends State {
     private float playerStartingX;
     private float tilemapEndingPosition;
 
+    private AudioClip audioClip;
+
     private void GenerateTilemap() {
         // Load the LDtk File
-        LDtkWorld worldFile = LDtkParser.Parse(FileUtils.ReadAssetFileAsString("assets/maps/world.ldtk"));
+        LDtkWorld worldFile = LDtkParser.Parse(IOUtils.ReadAssetFileAsString("assets/maps/world.ldtk"));
         LDtkLevel level = worldFile.ldtkLevels.get("Test_Level");
         LDtkLayer firstLayer = level.ldtkLayers.get(0);
 
@@ -64,6 +67,10 @@ public class GameState extends State {
         // Create UI Layer
         uiLayer = new GameUILayer(this);
         uiLayer.OnCreate();
+
+        audioClip = new AudioClip("assets/audio/BabyElephantWalk.wav");
+        audioClip.Create();
+        audioClip.PlayContinuously();
     }
 
     @Override
@@ -87,9 +94,7 @@ public class GameState extends State {
         this.renderer.Begin();
 
         this.tileMap.OnRender();
-
         this.player.OnRender();
-
         this.uiLayer.OnRender();
 
         this.renderer.End();

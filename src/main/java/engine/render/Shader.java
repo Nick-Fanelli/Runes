@@ -1,6 +1,6 @@
 package engine.render;
 
-import engine.utils.FileUtils;
+import engine.utils.IOUtils;
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
 
@@ -34,8 +34,8 @@ public class Shader {
     public void Create() {
         programID = glCreateProgram();
 
-        String vertShader = FileUtils.ReadAssetFileAsString("assets/shaders/" + shaderName + ".vert.glsl");
-        String fragShader = FileUtils.ReadAssetFileAsString("assets/shaders/" + shaderName + ".frag.glsl");
+        String vertShader = IOUtils.ReadAssetFileAsString("assets/shaders/" + shaderName + ".vert.glsl");
+        String fragShader = IOUtils.ReadAssetFileAsString("assets/shaders/" + shaderName + ".frag.glsl");
 
         if(vertShader == null || fragShader == null)
             throw new RuntimeException("Could not initialize Shaders!");

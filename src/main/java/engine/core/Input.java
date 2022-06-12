@@ -173,7 +173,7 @@ public class Input {
         if(key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
             glfwSetWindowShouldClose(window, true);
 
-        if(key <= NUM_KEYS)
+        if(key >= 0 && key <= NUM_KEYS)
             keys[key] = (action == GLFW_PRESS) || (action == GLFW_REPEAT);
     }
 
