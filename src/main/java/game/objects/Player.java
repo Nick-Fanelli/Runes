@@ -51,7 +51,7 @@ public class Player extends GameObject {
         this.walkingAnimation = new SpriteAnimation(1, 65, 8, true);
     }
 
-    private void HandleInput(float deltaTime) {
+    private void HandleInput() {
         boolean isAnimating = false;
 
         if(Input.IsKey(Input.KEY_RIGHT)) {
@@ -69,7 +69,7 @@ public class Player extends GameObject {
         }
 
         if(Input.IsKey(Input.KEY_UP)) {
-            rigidbody2D.SetDesiredYLinearVelocity(1f);
+            rigidbody2D.SetDesiredYLinearVelocity(0.65f);
         }
 
         if(!isAnimating) {
@@ -81,7 +81,7 @@ public class Player extends GameObject {
 
     @Override
     public void OnUpdate(float deltaTime) {
-        HandleInput(deltaTime);
+        HandleInput();
         UpdateSprite();
 
         super.OnUpdate(deltaTime);

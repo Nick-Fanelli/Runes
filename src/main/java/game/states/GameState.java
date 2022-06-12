@@ -6,6 +6,7 @@ import engine.map.ldtk.*;
 import engine.physics2d.Physics2D;
 import engine.state.State;
 import engine.utils.FileUtils;
+import engine.utils.Range;
 import game.objects.Player;
 import game.ui.GameUILayer;
 import org.joml.Vector2f;
@@ -22,24 +23,27 @@ public class GameState extends State {
     private TileMap tileMap;
 
     private float playerStartingX;
+    private float tilemapEndingPosition;
 
-    @Override
-    public void OnCreate() {
-        super.OnCreate();
-
+    private void GenerateTilemap() {
+        // Load the LDtk File
         LDtkWorld worldFile = LDtkParser.Parse(FileUtils.ReadAssetFileAsString("assets/maps/world.ldtk"));
         LDtkLevel level = worldFile.ldtkLevels.get("Test_Level");
         LDtkLayer firstLayer = level.ldtkLayers.get(0);
 
+        layerOffsetPosition = new Vector2f(firstLayer.layerStartPosition).negate();
+        tilemapEndingPosition = (firstLayer.__cWid * firstLayer.glTileSize) - layerOffsetPosition.x;
+
         // Generate Tile Map From Level
         tileMap = new TileMap(this, physics2D, level, 1);
         tileMap.GenerateGameObjects();
+    }
 
-        LDtkEntity tilemapPlayerEntity = tileMap.GetEntity("Player");
-
-        layerOffsetPosition = new Vector2f(firstLayer.layerStartPosition).negate();
-
+    private void CreatePlayer() {
         player = new Player(this);
+
+        // Get the player starting instance
+        LDtkEntity tilemapPlayerEntity = tileMap.GetEntity("Player");
 
         if(tilemapPlayerEntity != null) {
             player.transform.position = tilemapPlayerEntity.position;
@@ -47,9 +51,17 @@ public class GameState extends State {
         }
 
         this.playerStartingX = player.transform.position.x;
-
         physics2D.AddGameObject(player);
+    }
 
+    @Override
+    public void OnCreate() {
+        super.OnCreate();
+
+        GenerateTilemap();
+        CreatePlayer();
+
+        // Create UI Layer
         uiLayer = new GameUILayer(this);
         uiLayer.OnCreate();
     }
@@ -59,7 +71,9 @@ public class GameState extends State {
         // Update Physics
         physics2D.OnUpdate(deltaTime);
 
-        super.camera.SetXPosition(layerOffsetPosition.x + this.player.transform.position.x - this.playerStartingX);
+        super.camera.SetXPosition(
+                Range.Clip(layerOffsetPosition.x, tilemapEndingPosition,
+                        layerOffsetPosition.x + this.player.transform.position.x - this.playerStartingX));
 
         // Update Game Objects
         this.player.OnUpdate(deltaTime);
@@ -74,7 +88,6 @@ public class GameState extends State {
 
         this.tileMap.OnRender();
 
-//        renderer.GetLightRenderer().DrawLight(new Vector2f(1.861f, 0.89f), new Vector4f(1.0f, 0.35f, 0.35f, 1.0f));
         this.player.OnRender();
 
         this.uiLayer.OnRender();
