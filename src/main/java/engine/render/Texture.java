@@ -46,14 +46,7 @@ public class Texture {
         IntBuffer height = BufferUtils.createIntBuffer(1);
         IntBuffer channels = BufferUtils.createIntBuffer(1);
 
-        byte[] bytes;
-
-        try {
-            InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(filepath);
-            bytes = stream.readAllBytes();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        byte[] bytes = FileUtils.ReadAssetFileAsBytes(filepath);
 
         assert bytes != null;
 

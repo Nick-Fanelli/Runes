@@ -34,8 +34,8 @@ public class Shader {
     public void Create() {
         programID = glCreateProgram();
 
-        String vertShader = FileUtils.ReadAssetFile("assets/shaders/" + shaderName + ".vert.glsl");
-        String fragShader = FileUtils.ReadAssetFile("assets/shaders/" + shaderName + ".frag.glsl");
+        String vertShader = FileUtils.ReadAssetFileAsString("assets/shaders/" + shaderName + ".vert.glsl");
+        String fragShader = FileUtils.ReadAssetFileAsString("assets/shaders/" + shaderName + ".frag.glsl");
 
         if(vertShader == null || fragShader == null)
             throw new RuntimeException("Could not initialize Shaders!");

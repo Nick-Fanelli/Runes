@@ -27,7 +27,7 @@ public class GameState extends State {
     public void OnCreate() {
         super.OnCreate();
 
-        LDtkWorld worldFile = LDtkParser.Parse(FileUtils.ReadAssetFile("assets/maps/world.ldtk"));
+        LDtkWorld worldFile = LDtkParser.Parse(FileUtils.ReadAssetFileAsString("assets/maps/world.ldtk"));
         LDtkLevel level = worldFile.ldtkLevels.get("Test_Level");
         LDtkLayer firstLayer = level.ldtkLayers.get(0);
 
