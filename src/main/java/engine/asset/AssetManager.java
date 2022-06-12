@@ -27,7 +27,7 @@ public final class AssetManager {
             return textures.get(texturePath).rawAsset();
         }
 
-        Texture texture = new Texture(GetFilepath("assets/textures", texturePath));
+        Texture texture = new Texture("assets/textures" + File.separator + texturePath);
         texture.Create();
 
         Asset<Texture> asset = new Asset<>(texture, state);

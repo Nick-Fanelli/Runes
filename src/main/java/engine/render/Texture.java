@@ -5,6 +5,8 @@ import engine.utils.Logger;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.stb.STBImage;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
@@ -44,7 +46,22 @@ public class Texture {
         IntBuffer height = BufferUtils.createIntBuffer(1);
         IntBuffer channels = BufferUtils.createIntBuffer(1);
 
-        ByteBuffer image = stbi_load(filepath, width, height, channels, 0);
+        byte[] bytes;
+
+        try {
+            InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(filepath);
+            bytes = stream.readAllBytes();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        assert bytes != null;
+
+        ByteBuffer buffer = BufferUtils.createByteBuffer(bytes.length);
+        buffer.put(bytes);
+        buffer.flip();
+
+        ByteBuffer image = stbi_load_from_memory(buffer, width, height, channels, 0);
 
         if(image != null) {
             this.width = width.get(0);

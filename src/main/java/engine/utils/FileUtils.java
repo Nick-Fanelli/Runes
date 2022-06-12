@@ -8,10 +8,12 @@ public final class FileUtils {
 
     public static String ReadAssetFile(String filepath) {
 
-        File file = new File(filepath);
+        InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(filepath);
+
+        assert stream != null;
 
         try {
-            return new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
+            return new String(stream.readAllBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }

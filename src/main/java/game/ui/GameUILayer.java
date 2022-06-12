@@ -1,7 +1,6 @@
 package game.ui;
 
 import engine.asset.AssetManager;
-import engine.render.Texture;
 import engine.render.ui.AnchorPoint;
 import engine.render.ui.UIImage;
 import engine.render.ui.UILayer;
